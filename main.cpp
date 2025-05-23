@@ -8,11 +8,22 @@ typedef struct {
 } Questao;
 
 int main(void) {
+
+    FILE *pont_arq;
+pont_arq = fopen("C:\\Users\\jefer\\Desktop\\projeto_do_jogo\\Placar\\save.txt", "a");
+char nome_jogador[20];
+fprintf(pont_arq, "%s", nome_jogador);
+fclose(pont_arq);
+
+
     InitWindow(0, 0, "Gênio Quiz");
     ToggleFullscreen();
+    const char *scoreFile = "placar.txt";
 
     float screenWidth = GetScreenWidth();
     float screenHeight = GetScreenHeight();
+
+   
 
     SetTargetFPS(60);
 
@@ -33,10 +44,12 @@ int main(void) {
     Rectangle botoes[4];
     for (int i = 0; i < 4; i++) {
         botoes[i] = (Rectangle){ posicoes[i].x, posicoes[i].y, botao.width, botao.height };
+
     }
 
-    //botao play
+    //botoes (retangulo)
     Rectangle botaoIniciar = { screenWidth/2 - 200, screenHeight/2 -100, 400, 100 };
+    Rectangle botaoEnviarnome = { screenWidth/2 - 200, screenHeight/2 -100, 400, 100 };
     Rectangle botaoComoJogar = { screenWidth/2 - 200, screenHeight/2 + 50, 400, 100};
     Rectangle botaoPlacar = {screenWidth/2 -200, screenHeight/2 + 200, 400, 100};
     Rectangle botaoCredito = {screenWidth/2 -200, screenHeight/2 + 350, 400, 100};
@@ -56,6 +69,7 @@ int main(void) {
 
     // Estados 1 ou 0
     bool noMenu = true;
+    bool escreverNome = false;
     bool noComoJogar = false;
     bool noPlacar= false;
     bool noCredito= false;
@@ -69,35 +83,70 @@ int main(void) {
     int pontosTotais = 0;
 
     while (!WindowShouldClose()) {
+        Vector2 mousePos = GetMousePosition();
 
         if (noMenu) {
-            Vector2 mousePos = GetMousePosition();
-            //iniciar
-                 if (CheckCollisionPointRec(mousePos, botaoIniciar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    noMenu = false;
-                    tempoRestante = 20.0f;
-                    pontosQuestao = 100;
-                    questaoAtual = 0;
-                    pontosTotais = 0;
-                    errou = false;
-                    mostrandoResultado = false;
-                    tempoAcabou = false;
-                  }
-                  //como  jogar
-                  else if(CheckCollisionPointRec(mousePos, botaoComoJogar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-                    noComoJogar= true;
-                    noMenu= false;
-                }
+            if (CheckCollisionPointRec(mousePos, botaoIniciar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                noMenu = false;
+                escreverNome = true;
+            }
+            else if (CheckCollisionPointRec(mousePos, botaoComoJogar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                noComoJogar = true;
+                noMenu = false;
+            }
+            else if (CheckCollisionPointRec(mousePos, botaoPlacar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                noPlacar= true;
+                noMenu= false;
+            }
+            else if (CheckCollisionPointRec(mousePos, botaoCredito) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                noCredito= true;
+                noMenu= false;
+            }
 
-    } else if(noComoJogar){
-         Vector2 mousePos = GetMousePosition();
+    } else if (escreverNome) {
+        
+
+
+
+        if (CheckCollisionPointRec(mousePos, botaoEnviarnome) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            escreverNome = false;
+            tempoRestante = 20.0f;
+            pontosQuestao = 100;
+            questaoAtual = 0;
+            pontosTotais = 0;
+            errou = false;
+            mostrandoResultado = false;
+            tempoAcabou = false;
+        }
+        if (CheckCollisionPointRec(mousePos, botaoSairF) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            noMenu = true;
+            escreverNome = false;
+        }
+
+        }else if(noComoJogar){
             botaoSair= true;
             if(CheckCollisionPointRec(mousePos, botaoSairF) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
                 noMenu= true;
                 noComoJogar= false;
             }
+            
 
-        } else if (!mostrandoResultado) {
+        } else if(noPlacar){
+            botaoSair= true;
+            if(CheckCollisionPointRec(mousePos, botaoSairF) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                noMenu= true;
+                noPlacar= false;
+            }
+
+         }else if(noCredito){
+            botaoSair= true;
+            if(CheckCollisionPointRec(mousePos, botaoSairF) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                noMenu= true;
+                noCredito= false;
+            }
+        
+        
+        }else if (!mostrandoResultado) {
             tempoRestante -= GetFrameTime();
             if (tempoRestante > 0.0f) {
                 pontosQuestao = (int)(tempoRestante * 5.0f);
@@ -114,7 +163,7 @@ int main(void) {
                     IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     if (i == questoes[questaoAtual].respostaCorreta) {
                         pontosTotais += pontosQuestao;
-
+                        
                         // Avança para a próxima questão automaticamente
                         questaoAtual++;
                         if (questaoAtual >= totalQuestoes) {
@@ -164,19 +213,30 @@ int main(void) {
              DrawRectangleRec(botaoCredito, GRAY);
              DrawText("CREDITOS", screenWidth/2 - MeasureText("CREDITOS", 60)/2, screenHeight/2 + 370, 60, BLACK);
 
+
+         }else if(escreverNome){
+            DrawText("enviar", screenWidth/2 - MeasureText("enviar", 60)/2, screenHeight/2 - 80, 60, BLACK);
+            DrawText("<", 40, 30, 100, BLACK);
+
+
+
+            
         } else if(noComoJogar){
-            DrawText("so responder la mano lol", screenWidth/2 - MeasureText("GÊNIO QUIZ", 120)/2, screenHeight/2 - 300, 120, BLACK);
+            DrawText("so responder la mano lol", screenWidth/2 - MeasureText("so responder la mano lol", 60)/2, screenHeight/2 - 300, 60, BLACK);
             //DrawRectangleRec(botaoSairF, GRAY);
             DrawText("<", 40, 30, 100, BLACK);
 
+        } else if(noPlacar){
+            DrawText("placar", screenWidth/2 - MeasureText("Placar", 60)/2, screenHeight/2 - 300, 60, BLACK);
+            DrawText("<", 40, 30, 100, BLACK);
+        } else if(noCredito){
+            DrawText("creditos", screenWidth/2 - MeasureText("creditos", 60)/2, screenHeight/2 - 300, 60, BLACK);
+            DrawText("<", 40, 30, 100, BLACK);
         }
-        
-        
-        
         
         else {
             DrawTexture(numero, numero_pos.x, numero_pos.y, WHITE);
-            DrawText(TextFormat("%d", questaoAtual + 1), 90, 70, 90, BLACK);
+            DrawText(TextFormat("%d", questaoAtual + 20), 125 -  MeasureText("9", 70)/2, 80, 70, BLACK);
             DrawText(TextFormat("Pontos: %d", pontosTotais), screenWidth - 290, 20, 40, DARKGRAY);
 
             if (!mostrandoResultado) {
@@ -188,8 +248,16 @@ int main(void) {
                          150, 60, BLACK);
 
                 for (int i = 0; i < 4; i++) {
-                    bool hover = CheckCollisionPointRec(GetMousePosition(), botoes[i]);
-                    Color corBotao = hover ? (Color){ 200, 200, 200, 255 } : WHITE;
+                    bool hover;
+                    Color corBotao;
+
+                    hover = CheckCollisionPointRec(GetMousePosition(), botoes[i]);
+
+                    if (hover) {
+                        corBotao = (Color){ 200, 200, 200, 255 };
+                    } else {
+                        corBotao = WHITE;
+                    }
 
                     DrawTexture(botao, posicoes[i].x, posicoes[i].y, corBotao);
 

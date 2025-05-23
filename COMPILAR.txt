@@ -1,0 +1,2 @@
+gcc main.c libraylib.a -Iinclude -lopengl32 -lgdi32 -lwinmm -o jogo.exe
+pause
