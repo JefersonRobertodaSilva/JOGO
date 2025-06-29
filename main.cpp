@@ -60,8 +60,17 @@ void salvarPontuacao(const char *nome, int pontos) {
     }
 }
 
-int compararPontuacao(const void *a, const void *b) {
-    return ((Jogador*)b)->pontos - ((Jogador*)a)->pontos;
+void OrdenarRanking(Jogador jogadores[], int totalJogadores) {
+    for (int i = 0; i < totalJogadores - 1; i++) {
+        for (int j = 0; j < totalJogadores - i - 1; j++) {
+            if (jogadores[j].pontos < jogadores[j + 1].pontos) {
+                // Trocar os jogadores de lugar
+                Jogador temp = jogadores[j];
+                jogadores[j] = jogadores[j + 1];
+                jogadores[j + 1] = temp;
+            }
+        }
+    }
 }
 
 //variaveis globais
@@ -202,7 +211,7 @@ int main(void) {
 {"Qual o próximo número da sequência?", {"16", "20", "22", "18"}, 3},
 };
     //calcula a quantidade de questoes automaticamente
-    int totalQuestoes = sizeof(questoes) / sizeof(Questao);
+    int totalQuestoes = 25;
     int questaoAtual = 0;
 
     // Estados 1 ou 0
@@ -331,8 +340,8 @@ int main(void) {
             }
 
             for (int i = 0; i < 4; i++) {
-                if (CheckCollisionPointRec(GetMousePosition(), botoes[i]) &&
-                    IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+
+                if (CheckCollisionPointRec(GetMousePosition(), botoes[i]) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     if (i == questoes[questaoAtual].respostaCorreta) {
                         pontosTotais += pontosQuestao;
                         
@@ -389,7 +398,7 @@ int main(void) {
         ClearBackground(RAYWHITE);
 
         if (noMenu) {
-             bool hover;
+             bool hover1;
              bool hover2;
              bool hover3;
              bool hover4;
@@ -399,8 +408,8 @@ int main(void) {
             Color corBotao4;
                 
                     //tom escuro do jogar
-                    hover = CheckCollisionPointRec(GetMousePosition(), botaoIniciar);
-                    if (hover) {
+                    hover1 = CheckCollisionPointRec(GetMousePosition(), botaoIniciar);
+                    if (hover1) {
                         corBotao = (Color){70, 70, 70, 255};
                     } else {
                         corBotao = GRAY;
@@ -456,7 +465,7 @@ int main(void) {
         } else if(noPlacar){
             carregarRanking();
             removerDuplicados();
-            qsort(jogadores, totalJogadores, sizeof(Jogador), compararPontuacao);
+            OrdenarRanking(jogadores, totalJogadores);
 
             // Desenha a lista no placar
             int y = 350;
@@ -515,8 +524,7 @@ int main(void) {
 
                     DrawText(questoes[questaoAtual].alternativas[i],
                              posicoes[i].x + 30,
-                             posicoes[i].y + botao.height/2 - 25,
-                             50, BLACK);
+                             posicoes[i].y + botao.height/2 - 25, 50, BLACK);
                     //imagens de algumas questoes
                     if(questaoAtual==0){
                         DrawTexture(graca, 820, 280, WHITE);
