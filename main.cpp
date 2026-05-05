@@ -23,7 +23,7 @@ int totalJogadores = 0;
 
 //funcoes
 void carregarRanking() {
-    FILE *pont_arq = fopen("C:\\Users\\jefer\\Desktop\\projeto_do_jogo\\Placar\\save.txt", "r");
+    FILE *pont_arq = fopen("C:\\projeto_do_jogo\\Placar\\save.txt", "r");
     totalJogadores = 0;
 
     if (pont_arq != NULL) {
@@ -53,15 +53,24 @@ void removerDuplicados() {
 }
 
 void salvarPontuacao(const char *nome, int pontos) {
-    FILE *pont_arq = fopen("C:\\Users\\jefer\\Desktop\\projeto_do_jogo\\Placar\\save.txt", "a");
+    FILE *pont_arq = fopen("C:\\projeto_do_jogo\\Placar\\save.txt", "a");
     if (pont_arq != NULL) {
         fprintf(pont_arq, "%s %d\n", nome, pontos);
         fclose(pont_arq);
     }
 }
 
-int compararPontuacao(const void *a, const void *b) {
-    return ((Jogador*)b)->pontos - ((Jogador*)a)->pontos;
+void OrdenarRanking(Jogador jogadores[], int totalJogadores) {
+    for (int i = 0; i < totalJogadores - 1; i++) {
+        for (int j = 0; j < totalJogadores - i - 1; j++) {
+            if (jogadores[j].pontos < jogadores[j + 1].pontos) {
+                // Trocar os jogadores de lugar
+                Jogador temp = jogadores[j];
+                jogadores[j] = jogadores[j + 1];
+                jogadores[j + 1] = temp;
+            }
+        }
+    }
 }
 
 //variaveis globais
@@ -83,61 +92,61 @@ int main(void) {
     float screenWidth = GetScreenWidth();
     float screenHeight = GetScreenHeight();
 
-   Music menu = LoadMusicStream("C:/Users/jefer/Desktop/projeto_do_jogo/sounds/MENU.mp3");
+   Music menu = LoadMusicStream("C:/projeto_do_jogo/sounds/MENU.mp3");
 
     PlayMusicStream(menu);
     SetTargetFPS(60);
 
     // Carregar texturas
-    Texture2D botao = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/botaoquest.png");
-    Texture2D numero = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao.png");
-    Texture2D meme = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/emojimeme.png");
-    Texture2D graca = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/graca.png");
-    Texture2D dado = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/dado.png");
-    Texture2D japao = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/japao.png");
-    Texture2D oli = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/Oli.png");
-    Texture2D logica4 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/questaologica4.png");
-    Texture2D questao = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/roda.jpeg");
-    Texture2D questaoY = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/questaop.jpeg");
-    Texture2D num23 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/num23.jpeg");
-    Texture2D holanda = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/holanda.png");
-    Texture2D roda25 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/roda25.jpeg");
-    Texture2D cerebro = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/cerebro.png");
-    Texture2D interrogacao = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/interrogacao.png");
-    Texture2D lampada = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/lampada.png");
-    Texture2D atomo = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/atomo.png");
-    Texture2D cinema = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/CINEMA.jpg");
-    Texture2D pray = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/bropray.jpeg");
-    Texture2D amassado = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/amassado.jpeg");  
-    Texture2D palco = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/palco.jpeg");
-    Texture2D dialogo = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/dialogo.png");
+    Texture2D botao = LoadTexture("C:/projeto_do_jogo/texturas/botaoquest.png");
+    Texture2D numero = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao.png");
+    Texture2D meme = LoadTexture("C:/projeto_do_jogo/texturas/emojimeme.png");
+    Texture2D graca = LoadTexture("C:/projeto_do_jogo/texturas/graca.png");
+    Texture2D dado = LoadTexture("C:/projeto_do_jogo/texturas/dado.png");
+    Texture2D japao = LoadTexture("C:/projeto_do_jogo/texturas/japao.png");
+    Texture2D oli = LoadTexture("C:/projeto_do_jogo/texturas/Oli.png");
+    Texture2D logica4 = LoadTexture("C:/projeto_do_jogo/texturas/questaologica4.png");
+    Texture2D questao = LoadTexture("C:/projeto_do_jogo/texturas/roda.jpeg");
+    Texture2D questaoY = LoadTexture("C:/projeto_do_jogo/texturas/questaop.jpeg");
+    Texture2D num23 = LoadTexture("C:/projeto_do_jogo/texturas/num23.jpeg");
+    Texture2D holanda = LoadTexture("C:/projeto_do_jogo/texturas/holanda.png");
+    Texture2D roda25 = LoadTexture("C:/projeto_do_jogo/texturas/roda25.jpeg");
+    Texture2D cerebro = LoadTexture("C:/projeto_do_jogo/texturas/cerebro.png");
+    Texture2D interrogacao = LoadTexture("C:/projeto_do_jogo/texturas/interrogacao.png");
+    Texture2D lampada = LoadTexture("C:/projeto_do_jogo/texturas/lampada.png");
+    Texture2D atomo = LoadTexture("C:/projeto_do_jogo/texturas/atomo.png");
+    Texture2D cinema = LoadTexture("C:/projeto_do_jogo/texturas/CINEMA.jpg");
+    Texture2D pray = LoadTexture("C:/projeto_do_jogo/texturas/bropray.jpeg");
+    Texture2D amassado = LoadTexture("C:/projeto_do_jogo/texturas/amassado.jpeg");  
+    Texture2D palco = LoadTexture("C:/projeto_do_jogo/texturas/palco.jpeg");
+    Texture2D dialogo = LoadTexture("C:/projeto_do_jogo/texturas/dialogo.png");
 
     //textura dos numeros questoes
-    Texture2D numero_questao1  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao1.png");
-    Texture2D numero_questao2  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao2.png");
-    Texture2D numero_questao3  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao3.png");
-    Texture2D numero_questao4  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao4.png");
-    Texture2D numero_questao5  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao5.png");
-    Texture2D numero_questao6  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao6.png");
-    Texture2D numero_questao7  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao7.png");
-    Texture2D numero_questao8  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao8.png");
-    Texture2D numero_questao9  = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao9.png");
-    Texture2D numero_questao10 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao10.png");
-    Texture2D numero_questao11 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao11.png");
-    Texture2D numero_questao12 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao12.png");
-    Texture2D numero_questao13 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao13.png");
-    Texture2D numero_questao14 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao14.png");
-    Texture2D numero_questao15 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao15.png");
-    Texture2D numero_questao16 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao16.png");
-    Texture2D numero_questao17 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao17.png");
-    Texture2D numero_questao18 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao18.png");
-    Texture2D numero_questao19 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao19.png");
-    Texture2D numero_questao20 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao20.png");
-    Texture2D numero_questao21 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao21.png");
-    Texture2D numero_questao22 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao22.png");
-    Texture2D numero_questao23 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao23.png");
-    Texture2D numero_questao24 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao24.png");
-    Texture2D numero_questao25 = LoadTexture("C:/Users/jefer/Desktop/projeto_do_jogo/texturas/numero_questao25.png");
+    Texture2D numero_questao1  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao1.png");
+    Texture2D numero_questao2  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao2.png");
+    Texture2D numero_questao3  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao3.png");
+    Texture2D numero_questao4  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao4.png");
+    Texture2D numero_questao5  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao5.png");
+    Texture2D numero_questao6  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao6.png");
+    Texture2D numero_questao7  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao7.png");
+    Texture2D numero_questao8  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao8.png");
+    Texture2D numero_questao9  = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao9.png");
+    Texture2D numero_questao10 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao10.png");
+    Texture2D numero_questao11 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao11.png");
+    Texture2D numero_questao12 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao12.png");
+    Texture2D numero_questao13 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao13.png");
+    Texture2D numero_questao14 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao14.png");
+    Texture2D numero_questao15 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao15.png");
+    Texture2D numero_questao16 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao16.png");
+    Texture2D numero_questao17 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao17.png");
+    Texture2D numero_questao18 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao18.png");
+    Texture2D numero_questao19 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao19.png");
+    Texture2D numero_questao20 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao20.png");
+    Texture2D numero_questao21 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao21.png");
+    Texture2D numero_questao22 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao22.png");
+    Texture2D numero_questao23 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao23.png");
+    Texture2D numero_questao24 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao24.png");
+    Texture2D numero_questao25 = LoadTexture("C:/projeto_do_jogo/texturas/numero_questao25.png");
 
 
     char mensagem[100];
@@ -202,7 +211,7 @@ int main(void) {
 {"Qual o próximo número da sequência?", {"16", "20", "22", "18"}, 3},
 };
     //calcula a quantidade de questoes automaticamente
-    int totalQuestoes = sizeof(questoes) / sizeof(Questao);
+    int totalQuestoes = 25;
     int questaoAtual = 0;
 
     // Estados 1 ou 0
@@ -273,7 +282,7 @@ int main(void) {
              }
 
             if(quantidadeLetra >= 1){
-                if(CheckCollisionPointRec(mousePos, botaoEnviarnome) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                if(CheckCollisionPointRec(mousePos, botaoEnviarnome) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || IsKeyPressed(KEY_ENTER)) {
                    escreverNome = false;
                     jogoAtivo= true;
                     tempoRestante = 35.0f;
@@ -331,8 +340,8 @@ int main(void) {
             }
 
             for (int i = 0; i < 4; i++) {
-                if (CheckCollisionPointRec(GetMousePosition(), botoes[i]) &&
-                    IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+
+                if (CheckCollisionPointRec(GetMousePosition(), botoes[i]) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     if (i == questoes[questaoAtual].respostaCorreta) {
                         pontosTotais += pontosQuestao;
                         
@@ -389,7 +398,7 @@ int main(void) {
         ClearBackground(RAYWHITE);
 
         if (noMenu) {
-             bool hover;
+             bool hover1;
              bool hover2;
              bool hover3;
              bool hover4;
@@ -399,8 +408,8 @@ int main(void) {
             Color corBotao4;
                 
                     //tom escuro do jogar
-                    hover = CheckCollisionPointRec(GetMousePosition(), botaoIniciar);
-                    if (hover) {
+                    hover1 = CheckCollisionPointRec(GetMousePosition(), botaoIniciar);
+                    if (hover1) {
                         corBotao = (Color){70, 70, 70, 255};
                     } else {
                         corBotao = GRAY;
@@ -456,7 +465,7 @@ int main(void) {
         } else if(noPlacar){
             carregarRanking();
             removerDuplicados();
-            qsort(jogadores, totalJogadores, sizeof(Jogador), compararPontuacao);
+            OrdenarRanking(jogadores, totalJogadores);
 
             // Desenha a lista no placar
             int y = 350;
@@ -515,8 +524,7 @@ int main(void) {
 
                     DrawText(questoes[questaoAtual].alternativas[i],
                              posicoes[i].x + 30,
-                             posicoes[i].y + botao.height/2 - 25,
-                             50, BLACK);
+                             posicoes[i].y + botao.height/2 - 25, 50, BLACK);
                     //imagens de algumas questoes
                     if(questaoAtual==0){
                         DrawTexture(graca, 820, 280, WHITE);
